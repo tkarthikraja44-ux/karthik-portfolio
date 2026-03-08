@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Space Grotesk", serif;
+
+  --color-apple-gray: #1d1d1f;
+  --color-apple-light: #f5f5f7;
+  --color-apple-dark: #000000;
+
+  --color-apple-glass: rgba(255, 255, 255, 0.05);
+  --color-apple-glass-border: rgba(255, 255, 255, 0.1);
+}
+
+@layer base {
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  /* ─── GPU Acceleration Utilities ─────────────────────────────────────────── */
+  /*
+    Use .gpu on any element that will be animated (scroll reveals, parallax, hover cards).
+    Forces the browser to composite the element on the GPU, preventing the main thread
+    from handling paint — the key to 60–120fps scrolling like Apple / Vercel pages.
+  */
+  .gpu {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+
+  /* For elements only needing GPU compositing without will-change hints */
+  .promote {
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Applied to containers that hold animated children */
+  .contain-paint {
+    contain: paint;
+  }
+
+  .glass-card {
+    background: var(--color-apple-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-apple-glass-border);
+  }
+
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #fff, #a1a1aa);
+  }
+
+  /* Custom Webkit Scrollbar for inner dashboard sections */
+  .styled-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .styled-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+  }
+
+  .styled-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+  }
+
+  .styled-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .hover-target {
+    cursor: none;
+    /* Let existing CustomCursor handle it, or auto if needed */
+  }
+
+  /* Cinematic Section Transitions */
+  .fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: opacity, transform;
+  }
+
+  .fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Global GPU Performance Rules ─────────────────────────────────────────── */
+/*
+  Force all elements to be rendered in their own compositing layer context.
+  This prevents layout repaints from propagating up the tree, mimicking
+  the high-performance approach used by Apple / Linear product pages.
+*/
+*, *::before, *::after {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+html {
+  /* Hint: smooth scrolling for in-page anchors (Lenis overrides this at runtime) */
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-apple-dark);
+  color: var(--color-apple-light);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  /* Sub-pixel text rendering for sharp crisp text on high-DPI displays */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
