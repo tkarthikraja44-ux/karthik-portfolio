@@ -76,9 +76,10 @@ export default function Navbar() {
 
     return (
         <header
-            className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl py-3 px-5 md:px-6 bg-[#0a0a0f]/80 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] rounded-2xl md:rounded-full transition-all duration-700 ease-[0.16,1,0.3,1]"
+            className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl transition-all duration-700"
         >
-            <div className="flex justify-between items-center w-full">
+            {/* Pill bar */}
+            <div className="flex justify-between items-center w-full py-3 px-5 md:px-6 bg-[#0a0a0f]/80 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] rounded-2xl md:rounded-full overflow-hidden">
 
                 {/* Logo */}
                 <a
