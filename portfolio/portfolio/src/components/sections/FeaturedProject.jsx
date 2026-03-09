@@ -166,7 +166,7 @@ function FeaturedProject() {
 
             <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center">
                 {/* Header */}
-                <div className="project-header text-center mb-8 sm:mb-12 lg:mb-16 max-w-4xl mx-auto flex flex-col items-center gpu">
+                <div className="project-header text-center mb-12 lg:mb-16 max-w-4xl mx-auto flex flex-col items-center gpu">
                     <span className="inline-block text-xs font-semibold tracking-widest uppercase text-blue-400/80 border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 rounded-full mb-4 backdrop-blur-md">
                         PROJECT 02
                     </span>
@@ -179,7 +179,7 @@ function FeaturedProject() {
                 </div>
 
                 {/* Preview */}
-                <div className="project-preview w-full max-w-5xl rounded-[1.5rem] md:rounded-[2rem] shadow-[0_40px_100px_rgba(59,130,246,0.15)] aspect-[4/3] sm:aspect-[16/10] md:aspect-[21/9] mb-10 sm:mb-16 lg:mb-24 relative group gpu">
+                <div className="project-preview w-full max-w-5xl rounded-[1.5rem] md:rounded-[2rem] shadow-[0_40px_100px_rgba(59,130,246,0.15)] aspect-[16/10] md:aspect-[21/9] mb-16 lg:mb-24 relative group gpu">
                     <div className="absolute -inset-px bg-gradient-to-br from-blue-500/20 to-cyan-500/10 rounded-[1.5rem] md:rounded-[2rem] blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-700 promote" />
                     <div className="relative h-full w-full glass-card rounded-[1.5rem] md:rounded-[2rem] overflow-hidden border border-white/10 bg-[#050510]/95 transition-colors duration-500 group-hover:border-blue-500/30">
                         <div className="flex-1 overflow-hidden h-full">
@@ -189,7 +189,7 @@ function FeaturedProject() {
                 </div>
 
                 {/* Bottom section */}
-                <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-16 items-start">
+                <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
                     {/* Features */}
                     <div className="project-features space-y-6">
                         <h4 className="text-xl font-medium text-white tracking-tight feature-item mb-2 border-b border-white/5 pb-4">Key Capabilities</h4>

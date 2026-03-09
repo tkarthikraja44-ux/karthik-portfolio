@@ -139,14 +139,15 @@
   }
 }
 
-/* ─── GPU Performance — scoped to animated elements only ────────────────────── */
+/* ─── Global GPU Performance Rules ─────────────────────────────────────────── */
 /*
-  Scoped to .gpu/.promote/.glass-card instead of * to avoid excessive
-  memory usage on low-end mobile devices.
+  Force all elements to be rendered in their own compositing layer context.
+  This prevents layout repaints from propagating up the tree, mimicking
+  the high-performance approach used by Apple / Linear product pages.
 */
-.gpu,
-.promote,
-.glass-card {
+*,
+*::before,
+*::after {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -155,9 +156,6 @@ html {
   scroll-behavior: smooth;
   /* Prevent horizontal overflow — crucial for mobile */
   overflow-x: hidden;
-  /* Prevent text size jump on iOS orientation change */
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
 }
 
 body {
@@ -170,35 +168,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
-  /* iOS smooth momentum scrolling */
-  -webkit-overflow-scrolling: touch;
-  /* Allow vertical swipe, prevent accidental horizontal conflicts */
-  touch-action: pan-y;
 }
 
 ::selection {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
-}
-
-/* ─── Reduced Motion ─────────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* ─── Mobile touch target enforcement ───────────────────────────────────────── */
-@media (max-width: 768px) {
-
-  button,
-  a {
-    min-height: 44px;
-  }
 }
