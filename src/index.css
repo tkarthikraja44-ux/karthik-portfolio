@@ -123,8 +123,9 @@
 }
 
 html {
-  /* Hint: smooth scrolling for in-page anchors (Lenis overrides this at runtime) */
   scroll-behavior: smooth;
+  /* Prevent horizontal overflow — crucial for mobile */
+  overflow-x: hidden;
 }
 
 body {

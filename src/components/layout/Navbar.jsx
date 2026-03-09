@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Github, Linkedin, Mail } from "lucide-react";
 
@@ -6,6 +6,8 @@ export default function Navbar() {
 
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const lastScrollY = useRef(0);
+    const [scrollingDown, setScrollingDown] = useState(false);
 
     const navLinks = [
         { name: "About", href: "#about" },
@@ -34,10 +36,13 @@ export default function Navbar() {
     useEffect(() => {
 
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            const currentY = window.scrollY;
+            setScrolled(currentY > 50);
+            setScrollingDown(currentY > lastScrollY.current && currentY > 100);
+            lastScrollY.current = currentY;
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
 
         return () => window.removeEventListener("scroll", handleScroll);
 
@@ -47,8 +52,8 @@ export default function Navbar() {
 
         <header
             className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ${scrolled
-                    ? "top-4 md:top-6 py-3 px-5 md:px-8 w-[calc(100%-2rem)] md:w-auto bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full"
-                    : "top-0 py-6 px-6 lg:px-8 w-full bg-transparent"
+                ? "top-4 md:top-6 py-3 px-5 md:px-8 w-[calc(100%-2rem)] md:w-auto bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl md:rounded-full"
+                : "top-0 py-6 px-6 lg:px-8 w-full bg-transparent"
                 }`}
         >
 
@@ -152,10 +157,12 @@ export default function Navbar() {
 
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="text-white/80 hover:text-white"
+                        className="text-white/80 hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl"
+                        style={{ touchAction: "manipulation" }}
+                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                     >
 
-                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
 
                     </button>
 
@@ -171,11 +178,11 @@ export default function Navbar() {
                 {mobileMenuOpen && (
 
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "100vh" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="md:hidden fixed inset-0 top-[60px] bg-black/95 backdrop-blur-2xl px-6 py-8 flex flex-col"
+                        initial={{ opacity: 0, y: -16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -16 }}
+                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                        className="md:hidden fixed inset-0 top-[60px] bg-black/96 backdrop-blur-2xl px-4 sm:px-6 py-6 flex flex-col overflow-y-auto"
                     >
 
                         {navLinks.map((link, i) => (
@@ -183,11 +190,12 @@ export default function Navbar() {
                             <motion.a
                                 key={link.name}
                                 href={link.href}
-                                initial={{ opacity: 0, x: -20 }}
+                                initial={{ opacity: 0, x: -16 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: i * 0.1 }}
+                                transition={{ duration: 0.25, delay: i * 0.07 }}
                                 onClick={(e) => handleNavClick(e, link.href)}
-                                className="text-2xl font-semibold py-4 border-b border-white/10 text-white/80 hover:text-white"
+                                style={{ touchAction: "manipulation" }}
+                                className="text-xl sm:text-2xl font-semibold min-h-[56px] flex items-center border-b border-white/10 text-white/80 hover:text-white active:text-white transition-colors"
                             >
                                 {link.name}
                             </motion.a>
@@ -197,31 +205,31 @@ export default function Navbar() {
 
                         {/* MOBILE SOCIAL */}
 
-                        <div className="mt-auto flex gap-6 pb-20 justify-center">
+                        <div className="mt-auto flex gap-4 sm:gap-6 pb-16 sm:pb-20 pt-8 justify-center">
 
                             <a
                                 href="https://github.com/tkarthikraja44-ux"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-3 glass-card rounded-full text-white/80"
+                                className="p-3 glass-card rounded-full text-white/80 min-h-[48px] min-w-[48px] flex items-center justify-center"
                             >
-                                <Github size={24} />
+                                <Github size={22} />
                             </a>
 
                             <a
                                 href="https://www.linkedin.com/in/karthik-raja-thavamani/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-3 glass-card rounded-full text-white/80"
+                                className="p-3 glass-card rounded-full text-white/80 min-h-[48px] min-w-[48px] flex items-center justify-center"
                             >
-                                <Linkedin size={24} />
+                                <Linkedin size={22} />
                             </a>
 
                             <a
                                 href="mailto:tkarthikraja44@gmail.com"
-                                className="p-3 glass-card rounded-full text-white/80"
+                                className="p-3 glass-card rounded-full text-white/80 min-h-[48px] min-w-[48px] flex items-center justify-center"
                             >
-                                <Mail size={24} />
+                                <Mail size={22} />
                             </a>
 
                         </div>
