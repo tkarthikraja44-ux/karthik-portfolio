@@ -11,8 +11,11 @@ const ScrollProgress = memo(function ScrollProgress() {
 
     return (
         <motion.div
-            className="fixed top-0 left-0 right-0 h-1 bg-white/80 transform-origin-left z-50"
-            style={{ scaleX }}
+            className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 origin-left z-[100]"
+            style={{
+                scaleX,
+                boxShadow: '0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(168, 85, 247, 0.3)'
+            }}
         />
     );
 });

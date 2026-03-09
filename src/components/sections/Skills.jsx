@@ -1,4 +1,4 @@
-import { useRef, memo } from 'react';
+import { useRef, useState, memo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Layout, Terminal, Braces } from 'lucide-react';
 import TiltCard from '../ui/TiltCard';
@@ -33,40 +33,41 @@ const skills = [
 
 const Skills = memo(function Skills() {
     const containerRef = useRef(null);
-    const isInView = useInView(containerRef, { once: true, margin: "-80px" });
+    const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
     return (
-        <section id="skills" className="py-20 md:py-32 lg:py-40 relative w-full min-h-screen flex items-center z-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full" ref={containerRef}>
+        <section id="skills" className="py-32 md:py-48 relative w-full min-h-screen flex items-center z-10 bg-transparent overflow-hidden">
+            {/* Background Blob */}
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full" ref={containerRef}>
 
                 {/* Section Header */}
-                <div className="mb-12 sm:mb-16 md:mb-20 text-center">
+                <div className="mb-24 text-center">
                     <motion.h2
-                        variants={fadeUpVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={VIEWPORT}
-                        className="text-sm font-semibold tracking-widest uppercase text-white/40 mb-3"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-sm font-bold tracking-[0.3em] uppercase text-purple-400 mb-6"
                     >
-                        Technical Arsenal
+                        TECHNICAL ARSENAL
                     </motion.h2>
                     <motion.h3
-                        variants={fadeUpDelayedVariants(0.1)}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={VIEWPORT}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter text-white"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-premium text-white"
                     >
-                        Tools of the <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-700">trade.</span>
+                        Tools of the <span className="text-white/30">trade.</span>
                     </motion.h3>
                     <motion.p
-                        variants={fadeUpDelayedVariants(0.2)}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={VIEWPORT}
-                        className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-white/50 font-light max-w-2xl mx-auto leading-relaxed px-2 sm:px-0"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="mt-8 text-lg text-white/40 font-light max-w-2xl mx-auto leading-relaxed"
                     >
-                        A specialized skillset focused on foundational programming logic, robust back-end concepts, and modern web integration.
+                        A specialized skillset focused on foundational programming logic,
+                        robust backend architecture, and modern web integration.
                     </motion.p>
                 </div>
 
@@ -74,39 +75,73 @@ const Skills = memo(function Skills() {
                     variants={staggerContainerVariants}
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-8"
                 >
                     {skills.map((skill, index) => (
-                        <TiltCard key={index} tiltStrength={10}>
-                            <motion.div
-                                variants={staggerItemVariants}
-                                whileHover={{ y: -6, scale: 1.02 }}
-                                transition={{ duration: 0.35, ease: "easeOut" }}
-                                className={`h-full glass-card p-6 sm:p-8 md:p-10 rounded-[1.5rem] sm:rounded-[2rem] transition-all duration-700 group relative overflow-hidden bg-white/[0.02] border border-white/5 ${skill.glowColor} ${skill.borderColor}`}
-                            >
-                                <div className={`absolute inset-0 bg-gradient-to-br ${skill.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-
-                                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-black/50 backdrop-blur-md border border-white/10 shadow-inner flex items-center justify-center mb-6 sm:mb-8 md:mb-10 relative z-10 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-700 ease-out">
-                                    {skill.icon}
-                                </div>
-
-                                <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-5 sm:mb-6 md:mb-8 relative z-10">{skill.category}</h4>
-
-                                <ul className="space-y-3 sm:space-y-4 relative z-10">
-                                    {skill.items.map((item, i) => (
-                                        <li key={i} className="flex items-center text-white/60 group-hover:text-white/90 transition-colors duration-500 font-medium text-sm sm:text-base md:text-lg">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-white/30 mr-3 sm:mr-4 flex-shrink-0 group-hover:bg-white/80 transition-colors duration-500" />
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </motion.div>
-                        </TiltCard>
+                        <SkillCard key={index} skill={skill} />
                     ))}
                 </motion.div>
             </div>
         </section>
     );
 });
+
+const SkillCard = ({ skill }) => {
+    const cardRef = useRef(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseMove = (e) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        setMousePos({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        });
+    };
+
+    return (
+        <TiltCard tiltStrength={15}>
+            <motion.div
+                ref={cardRef}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                variants={staggerItemVariants}
+                className={`h-full p-8 md:p-10 rounded-[2.5rem] transition-all duration-700 group relative overflow-hidden bg-white/[0.03] border border-white/10 backdrop-blur-3xl ${skill.glowColor} ${skill.borderColor}`}
+            >
+                {/* Cursor Following Glow */}
+                <motion.div
+                    className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                        background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.06), transparent 40%)`
+                    }}
+                />
+
+                {/* Floating Gradient Background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${skill.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+
+                {/* Animated Inner Glow */}
+                <div className="absolute -inset-[100%] group-hover:inset-0 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none" />
+
+                <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center mb-10 relative z-10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 ease-out shadow-2xl">
+                    <div className="absolute inset-0 bg-white/5 blur-xl group-hover:bg-white/10 transition-colors" />
+                    <div className="relative z-10">{skill.icon}</div>
+                </div>
+
+                <h4 className="text-2xl font-bold text-white mb-8 relative z-10 tracking-tight">{skill.category}</h4>
+
+                <ul className="space-y-4 relative z-10">
+                    {skill.items.map((item, i) => (
+                        <li key={i} className="flex items-center text-white/40 group-hover:text-white/90 transition-all duration-500 font-medium">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white/10 mr-4 group-hover:bg-indigo-400 group-hover:scale-125 transition-all duration-500 shadow-[0_0_8px_rgba(129,140,248,0)] group-hover:shadow-[0_0_8px_rgba(129,140,248,0.5)]" />
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+            </motion.div>
+        </TiltCard>
+    );
+};
 
 export default Skills;

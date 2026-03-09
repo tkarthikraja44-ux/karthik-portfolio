@@ -1,6 +1,11 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, lazy, Suspense, useLayoutEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+gsap.registerPlugin(ScrollTrigger);
+
+// Global Contexts & Utils
 // Global Contexts & Utils
 import { ThemeProvider } from './context/ThemeContext';
 import { initSmoothScroll, destroySmoothScroll } from './utils/smoothScroll';
@@ -35,6 +40,44 @@ import Contact from './components/sections/Contact';
 function App() {
   const [loading, setLoading] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
+
+  useLayoutEffect(() => {
+    if (loading) return;
+
+    const sections = [
+      { id: '#about', color: '#020205' },
+      { id: '#skills', color: '#050510' },
+      { id: '#project-assessment', color: '#080816' },
+      { id: '#project-peernotes', color: '#0a0a1f' },
+      { id: '#project-banksystem', color: '#080816' },
+      { id: '#experience', color: '#050510' },
+      { id: '#contact', color: '#000000' }
+    ];
+
+    const ctx = gsap.context(() => {
+      sections.forEach((section) => {
+        const el = document.querySelector(section.id);
+        if (!el) return;
+
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 60%",
+          end: "bottom 60%",
+          onToggle: (self) => {
+            if (self.isActive) {
+              gsap.to("body", {
+                backgroundColor: section.color,
+                duration: 1.2,
+                ease: "power2.inOut"
+              });
+            }
+          }
+        });
+      });
+    }, document.body);
+
+    return () => ctx.revert();
+  }, [loading]);
 
   useEffect(() => {
     // Only initialize smooth scrolling after the loader has finished

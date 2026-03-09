@@ -21,47 +21,55 @@ const Education = memo(function Education() {
     const sectionRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
-        offset: ["start 70%", "end start"]
+        offset: ["start end", "end start"]
     });
 
-    const lineHeight = useTransform(scrollYProgress, [0, 0.5], ["0%", "100%"]);
+    const lineHeight = useTransform(scrollYProgress, [0.1, 0.5], ["0%", "100%"]);
+    const opacityLine = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
 
     return (
-        <section id="education" ref={sectionRef} className="py-20 md:py-32 relative bg-transparent w-full z-10 pb-28 sm:pb-36 md:pb-40">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
-                <div className="mb-16 md:mb-24 text-center pb-6 sm:pb-10">
+        <section id="education" ref={sectionRef} className="py-32 md:py-48 relative bg-transparent w-full z-10 overflow-hidden">
+            {/* Background Accents */}
+            <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
+                <div className="mb-24 text-center">
                     <motion.h2
-                        variants={fadeUpVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={VIEWPORT}
-                        className="text-sm font-semibold tracking-widest uppercase text-white/30 mb-3 ml-1"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-sm font-bold tracking-[0.3em] uppercase text-purple-400 mb-6"
                     >
-                        Education
+                        ACADEMIC FOUNDATION
                     </motion.h2>
                     <motion.h3
-                        variants={fadeUpDelayedVariants(0.1)}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={VIEWPORT}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter text-white"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-premium text-white"
                     >
-                        Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-700">Foundation.</span>
+                        Success through <span className="text-white/30">excellence.</span>
                     </motion.h3>
                 </div>
 
-                <div className="relative pl-8 sm:pl-10 md:pl-0 max-w-4xl mx-auto">
-                    <div className="absolute left-[31.5px] sm:left-[39.5px] md:left-1/2 md:-ml-px top-0 bottom-0 w-px bg-white/[0.05]">
+                <div className="relative max-w-5xl mx-auto">
+                    {/* Animated timeline line */}
+                    <div className="absolute left-1/2 -ml-px top-0 bottom-0 w-px bg-white/5 hidden md:block">
                         <motion.div
-                            className="w-px bg-gradient-to-b from-white via-white/50 to-transparent shadow-[0_0_10px_2px_rgba(255,255,255,0.3)]"
-                            style={{ height: lineHeight }}
+                            className="w-px bg-gradient-to-b from-purple-500 via-indigo-500 to-transparent shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+                            style={{ height: lineHeight, opacity: opacityLine }}
                         />
                     </div>
 
-                    {educationData.map((edu, idx) => (
-                        <TimelineItem key={idx} edu={edu} index={idx} />
-                    ))}
-
+                    <div className="space-y-16">
+                        {educationData.map((edu, idx) => (
+                            <TimelineItem
+                                key={idx}
+                                edu={edu}
+                                index={idx}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
@@ -70,48 +78,53 @@ const Education = memo(function Education() {
 
 const TimelineItem = memo(function TimelineItem({ edu, index }) {
     const itemRef = useRef(null);
-    const isInView = useInView(itemRef, { once: true, margin: "-80px" });
-
+    const isInView = useInView(itemRef, { once: true, margin: "-100px" });
     const isEven = index % 2 === 0;
 
     return (
         <motion.div
             ref={itemRef}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
-            className={`relative flex flex-col md:flex-row justify-between items-start md:items-center w-full mb-10 sm:mb-12 group ${isEven ? 'md:flex-row-reverse' : ''}`}
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+            className={`relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 group ${isEven ? '' : 'md:flex-row-reverse'}`}
         >
-
-            {/* Desktop side label */}
-            <div className={`hidden md:flex flex-col w-1/2 justify-center ${isEven ? 'text-left pl-16' : 'text-right pr-16'}`}>
-                <span className={`font-mono text-sm text-white/40 tracking-widest uppercase mb-1 block ${isEven ? '' : 'ml-auto'}`}>{edu.period}</span>
-                <span className={`text-white/30 text-xs tracking-wider block ${isEven ? '' : 'ml-auto'}`}>{edu.institution}</span>
+            {/* Desktop Label */}
+            <div className={`hidden md:flex flex-col justify-center ${isEven ? 'items-end pr-4' : 'items-start pl-4 order-2'}`}>
+                <span className="font-mono text-sm font-bold tracking-[0.2em] text-purple-400/60 group-hover:text-purple-400 transition-colors duration-500">{edu.period}</span>
+                <span className="text-white/30 text-xs font-medium tracking-wider group-hover:text-white/50 transition-colors duration-500 mt-2 uppercase">{edu.institution}</span>
             </div>
 
             {/* Node */}
-            <div className="absolute left-[-8px] md:left-1/2 md:-ml-2 w-4 h-4 rounded-full border-[2.5px] border-white/20 flex items-center justify-center bg-black z-10 shadow-[0_0_10px_rgba(255,255,255,0.1)] group-hover:scale-125 transition-transform duration-500 group-hover:border-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]" />
-
-            {/* Mobile label */}
-            <div className="block md:hidden w-full mb-4 mt-1 pl-1">
-                <span className="font-mono text-xs sm:text-sm text-white/50 tracking-widest uppercase block mb-1">{edu.period}</span>
-                <span className="text-white/30 text-xs tracking-wider block">{edu.institution}</span>
+            <div className="absolute left-1/2 -ml-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full border-2 border-white/10 bg-black z-20 hidden md:flex items-center justify-center group-hover:scale-125 group-hover:border-purple-500 transition-all duration-500">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-purple-500 transition-colors duration-500" />
             </div>
 
-            {/* Content */}
-            <div className={`w-full md:w-1/2 flex flex-col justify-center ${isEven ? 'md:pr-16' : 'md:pl-16'}`}>
+            {/* Card */}
+            <div className={`w-full ${isEven ? '' : 'order-1'}`}>
                 <motion.div
-                    whileHover={{ y: -4, scale: 1.01 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="glass-card p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl hover:bg-white/[0.03] transition-colors duration-500 hover:border-white/10 flex flex-col justify-center gap-3 sm:gap-4 bg-[#0A0A0A] border border-white/5"
+                    whileHover={{ x: isEven ? 10 : -10 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="p-8 md:p-10 rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-3xl transition-all duration-700 hover:bg-white/[0.05] hover:border-white/20 relative overflow-hidden"
                 >
-                    <h4 className="text-lg sm:text-xl md:text-3xl font-bold text-white tracking-tight mb-0.5 leading-tight">{edu.degree}</h4>
-                    <span className="text-white/80 font-medium text-sm sm:text-base md:text-lg border-t border-white/10 pt-3 sm:pt-4 mt-1 sm:mt-2 inline-block w-fit pr-6 sm:pr-8">
-                        {edu.score}
-                    </span>
+                    <div className="absolute -inset-[100%] group-hover:inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent -translate-x-full group-hover:animate-[shimmer_3s_infinite] pointer-events-none" />
+
+                    <div className="md:hidden flex flex-col mb-6">
+                        <span className="font-mono text-xs font-bold tracking-[0.2em] text-purple-400 mb-2">{edu.period}</span>
+                        <span className="text-white/40 text-[10px] font-bold tracking-widest uppercase">{edu.institution}</span>
+                    </div>
+
+                    <h4 className="text-2xl font-bold text-white mb-6 tracking-tight group-hover:text-purple-400 transition-colors">{edu.degree}</h4>
+
+                    <div className="flex items-center gap-4">
+                        <div className="h-px flex-1 bg-white/10" />
+                        <span className="px-5 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-bold tracking-wider">
+                            {edu.score}
+                        </span>
+                        <div className="h-px flex-1 bg-white/10" />
+                    </div>
                 </motion.div>
             </div>
-
         </motion.div>
     );
 });

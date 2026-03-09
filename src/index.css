@@ -37,6 +37,7 @@
 }
 
 @layer utilities {
+
   /* ─── GPU Acceleration Utilities ─────────────────────────────────────────── */
   /*
     Use .gpu on any element that will be animated (scroll reveals, parallax, hover cards).
@@ -65,11 +66,38 @@
     border: 1px solid var(--color-apple-glass-border);
   }
 
+  .text-premium {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
   .text-gradient {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(to right, #fff, #a1a1aa);
+  }
+
+  .bg-section-hero {
+    background-color: #000000;
+  }
+
+  .bg-section-about {
+    background-color: #020205;
+  }
+
+  .bg-section-skills {
+    background-color: #050510;
+  }
+
+  .bg-section-projects {
+    background-color: #080816;
+  }
+
+  .bg-section-contact {
+    background-color: #000000;
   }
 
   /* Custom Webkit Scrollbar for inner dashboard sections */
@@ -117,7 +145,9 @@
   This prevents layout repaints from propagating up the tree, mimicking
   the high-performance approach used by Apple / Linear product pages.
 */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
